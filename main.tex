@@ -125,7 +125,7 @@ Modern organizations continue to face fragmented cybersecurity practices, where 
 
 To address this limitation, this paper introduces the Threat-Intelligence Based Security Assessment (TIBSA) platform, an intelligence-driven framework that unifies automated STRIDE-based threat modeling, risk-oriented penetration testing, CTI enrichment, and continuous monitoring within a scalable, layered cloud-native architecture. By enabling automated threat-to-test mapping, multi-engine analysis, machine learning--assisted detection, and dynamic risk scoring, TIBSA establishes a closed-loop validation mechanism that continuously correlates architectural threats with real-world attack evidence. The proposed approach transforms security assessment from a periodic and reactive exercise into a continuous, adaptive, and data-driven cybersecurity capability.
 
-The remainder of this paper is organized as follows. Section~II defines the research problem. Section~III reviews related work. Section~IV describes the proposed architecture. Section~V presents the validation and benchmark results. Section~VI concludes the paper.
+The remainder of this paper is organized as follows. Section~II defines the research problem. Section~III reviews related work. Section~IV describes the proposed architecture. Section~V presents the validation and benchmark results. Section~VI presents the evaluation results. Section~VII concludes the paper.
 
 % ==================== SECTION II: RESEARCH PROBLEM ====================
 \section{Research Problem}
@@ -372,7 +372,7 @@ CWE-918 & Server-Side Request Forgery (SSRF) & \cmark\ Covered \\
 \hline
 CWE-306 & Missing Authentication for Critical Function & \cmark\ Covered (Redis, MQTT, Elasticsearch) \\
 \hline
-CWE-862/863 & Incorrect/Missing Authorization & \cmark\ Covered (BOLA, Tenant isolation) \\
+CWE-862/863 & Incorrect/Missing Authorization & \cmark\ Covered (BOLA, Tenant Isolation) \\
 \hline
 CWE-798 & Use of Hard-coded Credentials & \cmark\ Covered (IoT Firmware test) \\
 \hline
@@ -486,6 +486,14 @@ commands.txt (file upload) & File & 62 / 67 (92.5\%) & N/A & MALICIOUS \\
 \end{table}
 
 The scanner produced zero false positives on known-safe domains and correctly flagged malicious content in both test cases. However, evaluation revealed that the AI model contributed 0\% weight to the threat scores, meaning the final verdicts were driven entirely by VirusTotal data aggregation. This finding indicates that the AI component is not yet fully integrated into the file-type detection scoring pipeline.
+
+\subsection{Evaluation Limitations}
+
+\subsubsection{Threat Modeling Module}
+A key limitation of the evaluation methodology was the absence of a directly comparable baseline tool. Existing automated threat modeling tools, such as OWASP Threat Dragon, do not accept a textual technology stack description and automatically generate threats in the same manner as the proposed platform. Instead, these tools require the user to manually construct a Data Flow Diagram (DFD) and subsequently select threats from a predefined library on a per-element basis, rather than generating stack-specific threats automatically. Consequently, a like-for-like, tool-to-tool comparison was not feasible. To address this limitation, the evaluation instead compared the generated threats against established, industry-recognized reference frameworks---namely the OWASP Top 10 (2021) and the CWE Top 25---which represent a widely accepted ground truth for assessing the relevance and completeness of identified threats.
+
+\subsubsection{File Scanning Module}
+A further limitation arose during the evaluation of the file-based threat detection module. Comprehensive testing would ideally involve a diverse set of malicious file samples representing different threat categories (e.g., scripts, executables, macros, and shell commands). However, sourcing and handling multiple malicious file samples poses a significant safety risk, as such files could inadvertently infect or compromise the testing device if not properly isolated. To mitigate this risk while still validating the module's detection capability, a single representative malicious test file was used, in addition to the standard EICAR test file---an industry-standard, intentionally harmless file specifically designed to trigger antivirus and malware detection engines without posing any actual risk. This approach allowed the detection accuracy of the module to be verified under controlled, safe conditions, although it limits the generalizability of the results across the full spectrum of possible malicious file types.
 
 % ==================== SECTION VII: CONCLUSION ====================
 \section{Conclusion}
